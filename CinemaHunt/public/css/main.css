@@ -50,41 +50,28 @@ h1, h2, h3{
 	padding-right: 2%;
 	padding-top: 1%;
 	padding-bottom: 1%;
-	text-align: right;
+	text-align: left;
 
 }
 
 .details{
-	border: 1px solid #d3ceaa;
-	margin-left: 20%;
-	margin-right: 20%;
-	padding-left: 2%;
-	height: 600px;
-	width: 960px;
-	/*height: 100%;*/
+	border: 3px solid #d3ceaa;
+	padding: 0 10px 10px 10px;
 }
 
 .people{
-	border: 1px solid #d3ceaa;
-	float:left;
-	width: 350px;
-	height: 500px;
 	text-align: left;
 	padding-left: 1%;
+	padding-top: 10px;
 }
 
 .movieDetails{
-	border: 1px solid #d3ceaa;
-	width: 350px;
-	height: 500px;
-	float: right;
-	text-align: right;
+	text-align: left;
 	padding-right: 1%;
 }
 
 .movieDetails, p{
 	margin-bottom: 1px;
-	margin-top: 1px;
 }
 
 .form{
@@ -98,6 +85,9 @@ h1, h2, h3{
 	vertical-align: middle;
 	margin-left: 17%;
 	margin-right: 17%;
+}
+.logo-details{
+	width: 50%;
 }
 
 .search{

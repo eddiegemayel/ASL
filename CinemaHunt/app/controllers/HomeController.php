@@ -82,4 +82,85 @@ class HomeController extends BaseController {
 
 	}
 
-}
+	//login controller
+	//login function
+	public function login () {
+
+		//new empty data array
+		$data = array();
+
+		//grab username and password entered when form is triggered by post
+		$username = Input::get('username');
+		$password = Input::get('password');
+
+		//database query
+		//SELECT * FROM users WHERE username = username AND password = password
+		$results = DB::table('users')
+            	->where('username', $username)
+            	->where('password' , $password)
+            	->get();
+
+    	//if the results are not empty
+    	if($results != []){
+    		//store resuts into data array
+    		$data['user'] = $results;
+
+    		//point them to dashboard
+    		return View::make('dashboard', $data);
+    		// var_dump($results[0]->username);
+    	}else{
+    		$data['user'] = $username;
+
+    		//otherwise tell them they messed up
+    		return View::make('loginfail', $data);
+    	}
+
+
+	}
+
+
+	public function register () {
+		//empty data array for passing to view
+		$data = array();
+	
+		//grab user inputs
+		$username = Input::get('username');
+		$password = Input::get('password');
+
+		//query database with what user entered
+		$results = DB::table('users')
+           	 ->where('username', $username)
+           	 ->get();
+
+      	//count how many matches came back form the database
+     	$count = count($results, COUNT_RECURSIVE);
+     	// var_dump($count);
+
+    	//if no user matched results entered for signup
+    	if($count === 0){
+
+    		//run insert command
+    		$id = DB::table('users')->insertGetId(
+    			array('username' => $username, 'password' => $password)
+			);
+
+    		//grab username to welcome them
+    		$data['user'] = $username;
+
+    		//point them to dashboard
+    		return View::make('signupsuccess', $data);
+    		// var_dump($results[0]->username);
+
+   	 	//if users matched that username
+    	}else if($count > 0){
+    		//grab username to tell them its taken
+    		$data['user'] = $username;
+
+    		//render view and pass the data
+    		return View::make('signupfail', $data);
+   	 	}
+
+	}
+
+
+}//end of controller file

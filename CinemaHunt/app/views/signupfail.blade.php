@@ -10,8 +10,8 @@
 	<link rel="stylesheet" href="{{URL::asset('css/main.css')}}" type="text/css"/>
 </head>
 <body>
-	<div>
-		<a href="/"><img src="images/logo.jpg" height="203" width="480"/></a>
+	<div class="col-sm-8 col-sm-offset-2 col-xs-12 col-xs-offset-0">
+		<a href="/"><img src="../images/logo.jpg" class="logo-details"></a>
 	</div>
 	<h2>Sorry!</h2>
 	<div class="dashboard">

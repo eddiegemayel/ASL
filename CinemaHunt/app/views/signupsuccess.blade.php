@@ -10,12 +10,13 @@
 	<link rel="stylesheet" href="{{URL::asset('css/main.css')}}" type="text/css"/>
 </head>
 <body>
-	<div>
-		<a href="/"><img src="images/logo.jpg" height="203" width="480"/></a>
+	<div class="col-sm-8 col-sm-offset-2 col-xs-12 col-xs-offset-0">
+		<a href="/"><img src="../images/logo.jpg" class="logo-details"></a>
 	</div>
-	<h2>Success!</h2>
-	<div class="dashboard">
-		<h2>welcome, <span class="highlight">  {{$user}}. Youve been added to the database</span></h2>
+	<div class="dashboard col-xs-8 col-xs-offset-2">
+		<h2>Success!</h2>
+		<h2>Welcome, <span class="highlight">  {{$user}}. You've been added to the database.</span></h2>
+		<h3>Please now <a href="login">Log In</a> with your username and password.</h3>
 	</div>
 </body>
 </html>

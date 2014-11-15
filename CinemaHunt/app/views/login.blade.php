@@ -11,15 +11,22 @@
 	<link rel="stylesheet" href="{{URL::asset('css/main.css')}}" type="text/css"/>
 </head>
 <body>
-	<div>
-		<a href="/"><img src="../images/logo.jpg" height="203" width="480"/></a>
+	<div class="col-sm-8 col-sm-offset-2 col-xs-12 col-xs-offset-0">
+		<a href="/"><img src="../images/logo.jpg" class="logo-details"></a>
 	</div>
-	<h2>Log In</h2>
-	<form method="POST" action="login">
-		<input type="text" name="username" placeholder="username" autofocus/>
-		<input type="password" name="password" placeholder="password" />
-		<input type="submit" value="Log In" class="btn" />
-	</form>
-	
+	<div class="col-xs-8 col-xs-offset-2">
+		<h2>Log In</h2>
+		<form method="POST" action="login">
+		<div class="col-xs-12">
+			<input type="text" name="username" placeholder="username" autofocus required/>
+		</div>
+		<div class="col-xs-12">
+			<input type="password" name="password" placeholder="password" required/>
+		</div>
+		<div class="col-xs-12">
+			<input type="submit" value="Log In" class="btn" />
+		</div>
+		</form>
+	</div>
 </body>
 </html>
