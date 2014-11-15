@@ -13,39 +13,68 @@
 // // http://www.omdbapi.com/?s=300&r=json
 //HomeController@showresults
 
+//home route just returns index page
 Route::get('/', function()
 {	
 	return View::make('index');
 });
 
+//when user clicks a signup link
 Route::get('signup', function(){
+	//bring them to sign up page
 	return View::make('signup');
 });
 
+//inserts new user into database
 Route::post('signup', function(){
-
-	//inserts new user into database
-
+	//empty data array for passing to view
+	$data = array();
+	
+	//grab user inputs
 	$username = Input::get('username');
 	$password = Input::get('password');
 
-	$id = DB::table('users')->insertGetId(
-    array('username' => $username, 'password' => $password)
-	);
+	//query database with what user entered
+	$results = DB::table('users')
+            ->where('username', $username)
+            ->get();
 
-	$data = array();
+      //count how many matches came back form the database
+     $count = count($results, COUNT_RECURSIVE);
+     // var_dump($count);
 
-	$data['username'] = $username;
+    //if no user matched results entered for signup
+    if($count === 0){
 
-	return View::make('test', $data);
+    	//run insert command
+    	$id = DB::table('users')->insertGetId(
+    		array('username' => $username, 'password' => $password)
+		);
+
+    	//grab username to welcome them
+    	$data['user'] = $username;
+
+    	//point them to dashboard
+    	return View::make('signupsuccess', $data);
+    	// var_dump($results[0]->username);
+
+    //if users matched that username
+    }else if($count > 0){
+    	//grab username to tell them its taken
+    	$data['user'] = $username;
+
+    	//render view and pass the data
+    	return View::make('signupfail', $data);
+    }
 
 });
 
+//renders login page when user clicks on it
 Route::get('login', function(){
-	//just return login page when user clicks on it
 	return View::make('login');
 });
 
+//when user submits login form
 Route::post('login', function(){
 
 	// $creds = Input::only('username', 'password');
@@ -59,22 +88,35 @@ Route::post('login', function(){
 
 	// if(Auth::attempt(array('username' => $username, 'password' => $password))){
 	// 	return Redirect::intended('test');
-	// }
+	// }	
+
+	//new empty data array
+	$data = array();
 
 	//grab username and password entered when form is triggered by post
 	$username = Input::get('username');
 	$password = Input::get('password');
 
-
+	//database query
+	//SELECT * FROM users WHERE username = username & password = password
 	$results = DB::table('users')
             ->where('username', $username)
             ->where('password' , $password)
             ->get();
 
+    //if the results are not empty
     if($results != []){
-    	var_dump($results);
+    	//store resuts into data array
+    	$data['user'] = $results;
+
+    	//point them to dashboard
+    	return View::make('dashboard', $data);
+    	// var_dump($results[0]->username);
     }else{
-    	var_dump($username);
+    	$data['user'] = $username;
+
+    	//otherwise tell them they messed up
+    	return View::make('test', $data);
     }
 
      
