@@ -13,9 +13,9 @@
 	<div class="col-sm-8 col-sm-offset-2 col-xs-12 col-xs-offset-0">
 		<a href="/"><img src="../images/logo.jpg" class="logo-details"></a>
 	</div>
-	<h2>Dashboard</h2>
-	<div class="dashboard">
-		<h2>Welcome, <span class="highlight">{{$user[0]->username}}</span></h2>
+	<div class="dashboard col-sm-8 col-sm-offset-2 col-xs-12 col-xs-offset-0">
+		<h2>Dashboard</h2>
+		<h3>Welcome, {{$username}}</h3>
 	</div>
 </body>
 </html>

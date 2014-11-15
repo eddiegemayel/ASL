@@ -77,7 +77,8 @@ class HomeController extends BaseController {
 
 		//detail results for specific movie stored into array
 		$data['info'] = $results;
- 
+ 		
+ 		//render details view
 		return View::make('details', $data);
 
 	}
@@ -101,13 +102,16 @@ class HomeController extends BaseController {
             	->get();
 
     	//if the results are not empty
+        //in other words, if there is an exact match
     	if($results != []){
-    		//store resuts into data array
-    		$data['user'] = $results;
+    		//store thier username into a session
+    		Session::put('username', $results[0]->username);
 
+    		//store username into data object
+    		$data['username'] = Session::get('username');
+    	
     		//point them to dashboard
     		return View::make('dashboard', $data);
-    		// var_dump($results[0]->username);
     	}else{
     		$data['user'] = $username;
 
@@ -118,7 +122,7 @@ class HomeController extends BaseController {
 
 	}
 
-
+	//sign up function
 	public function register () {
 		//empty data array for passing to view
 		$data = array();
