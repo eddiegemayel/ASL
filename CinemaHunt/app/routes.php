@@ -44,8 +44,13 @@ Route::post('results', 'HomeController@results');
 //calls detail page with corresponding imdb id in the GET
 Route::get('details/{imdbID}', 'HomeController@details');
 
+//add favorites post
+route::post('/fav/{imdbID}', 'HomeController@addFavorite');
+
+//log out route
 Route::get('logout', 'HomeController@logout');
 
+//dashboard route 
 Route::get('dashboard', 'HomeController@dashboard');
 
 

@@ -77,6 +77,9 @@ class HomeController extends BaseController {
 
 		//detail results for specific movie stored into array
 		$data['info'] = $results;
+		$data['imdbID'] = $imdbID;
+
+		Session::put('info', $results);
  		
  		//render details view
 		return View::make('details', $data);
@@ -116,16 +119,16 @@ class HomeController extends BaseController {
     			//join favorites table
             	->join('favorites', 'users.id', '=', 'favorites.userid')
             	//select username and movie id
-            	->select('users.username', 'favorites.movieid')
+            	->select('users.username', 'favorites.movietitle', 'favorites.moviegenre')
             	//where user id current user id logged in
             	->where('users.id', '=', $data['user']->id)
             	->get();
     		
-    		Session::put('query', $query);
-
+            // Session::put('query', $query);
             //store query into data object to be passed
     		$data['query'] = $query;
-    		
+    			
+    			// var_dump($query);
     		// point them to dashboard
     		return View::make('dashboard', $data);
     	}else{
@@ -194,13 +197,61 @@ class HomeController extends BaseController {
 		return Redirect::to('/');
 	}
 
-	public function dashboard(){
-		$data = array();
 
-		$data['query'] = Session::get('query');
+	//displaying dashboard
+	public function dashboard(){
+		//new data array
+		$data = array();
 		$data['user'] = Session::get('user');
 
+		//query database for user's favorites
+    		$query = DB::table('users')
+    			//join favorites table
+            	->join('favorites', 'users.id', '=', 'favorites.userid')
+            	//select username and movie id
+            	->select('users.username', 'favorites.movietitle', 'favorites.moviegenre')
+            	//where user id current user id logged in
+            	->where('users.id', '=', $data['user']->id)
+            	->get();
+
+		//get session info
+		$data['query'] = $query;
+	
+		//pass everything to the rendered page
 		return View::make('dashboard', $data);
+	}
+
+
+	//adding a fav movie
+	public function addFavorite($imdbID){
+		//empty object for data
+		$data = array();
+
+		//url for details of movie
+		$url= "http://www.omdbapi.com/?i=".$imdbID."&r=json" ;
+
+		//response from API
+		$response = file_get_contents($url);
+
+		//decode incoming json
+		$results = json_decode($response);
+
+		//get user and movie details results
+		$data['user'] = Session::get('user');
+		$data['info'] = $results;
+
+		//put info into favorites data table
+		DB::table('favorites')->insertGetId(
+    		array('userid' => $data['user']->id, 
+    			'movieid' => $data['info']->imdbID,
+    			'movietitle' => $data['info']->Title,
+    			'moviegenre' => $data['info']->Genre
+
+    			)
+		);
+
+		//point them to next page
+		return View::make('/fav', $data);
 	}
 
 

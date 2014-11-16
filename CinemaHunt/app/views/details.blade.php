@@ -43,7 +43,13 @@
 			<p><span class="bold">IMDb Rating :</span> <span class="highlight">{{$info->imdbRating}}</span> ({{$info->imdbVotes}} votes)</p>
 			<p><span class="bold">Metascore : </span><span class="highlight">{{$info->Metascore}}</span></p>
 			<p>For more details visit <a href="http://www.imdb.com/title/{{$info->imdbID}}/" target="_blank">IMDb.</a></p>
-			<button class="btn">ADD TO FAVORITES</button>
+			@if(Session::get('user'))
+			<form method="POST" action="/fav/{{$imdbID}}">
+				<input class="btn" type="submit" value="ADD TO FAVORITES" />
+			</form>
+			@else
+			<p><a href="/login">Login</a> to add this movie to your favorites!</p>
+			@endif
 		</div>
 	</div>
 </body>
