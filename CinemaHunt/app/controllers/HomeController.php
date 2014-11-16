@@ -104,13 +104,27 @@ class HomeController extends BaseController {
     	//if the results are not empty
         //in other words, if there is an exact match
     	if($results != []){
+
     		//store thier username into a session
-    		Session::put('username', $results[0]->username);
+    		Session::put('user', $results[0]);
 
     		//store username into data object
-    		$data['username'] = Session::get('username');
-    	
-    		//point them to dashboard
+    		$data['user'] = Session::get('user');
+
+    		//query database for user's favorites
+    		$query = DB::table('users')
+    			//join favorites table
+            	->join('favorites', 'users.id', '=', 'favorites.userid')
+            	//select username and movie id
+            	->select('users.username', 'favorites.movieid')
+            	//where user id current user id logged in
+            	->where('users.id', '=', $data['user']->id)
+            	->get();
+    		
+            //store query into data object to be passed
+    		$data['query'] = $query;
+    		
+    		// point them to dashboard
     		return View::make('dashboard', $data);
     	}else{
     		$data['user'] = $username;
@@ -118,7 +132,6 @@ class HomeController extends BaseController {
     		//otherwise tell them they messed up
     		return View::make('loginfail', $data);
     	}
-
 
 	}
 
@@ -164,6 +177,19 @@ class HomeController extends BaseController {
     		return View::make('signupfail', $data);
    	 	}
 
+	}
+
+	//logout function
+	public function logout (){
+		//clear session of logged in user
+		Session::flush();
+
+
+		//should return NULL
+		// $username = Session::get('username');
+
+		//point them back to index
+		return Redirect::to('/');
 	}
 
 

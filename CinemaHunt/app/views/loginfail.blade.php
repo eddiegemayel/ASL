@@ -15,7 +15,7 @@
 		</div>
 		<div class="col-sm-8 col-sm-offset-2 col-xs-12">
 			<h1>ERROR!</h1>
-			<h2>User login for <span class="highlight">"{{$user}}"</span> didn't work.</h2>
+			<h2>Login attempt for username " {{$user}} " didn't work.</h2>
 			<h3>Username or password was incorrect. <a href="login">Try Again.</a></h3>
 		</div>
 	</body>

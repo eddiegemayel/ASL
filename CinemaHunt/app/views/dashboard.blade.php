@@ -12,10 +12,27 @@
 <body>
 	<div class="col-sm-8 col-sm-offset-2 col-xs-12 col-xs-offset-0">
 		<a href="/"><img src="../images/logo.jpg" class="logo-details"></a>
+		<a href="logout">Logout</a>
 	</div>
 	<div class="dashboard col-sm-8 col-sm-offset-2 col-xs-12 col-xs-offset-0">
-		<h2>Dashboard</h2>
-		<h3>Welcome, {{$username}}</h3>
+		<div class="movieDetails col-sm-6 col-xs-12">
+			<h2>Dashboard</h2>
+			<h3>Welcome, {{$user->username}}</h3>
+			<p>Your password is : {{$user->password}}</p>
+			<p>For Developer Purposes, your unique userid is : <span class="highlight">{{$user->id}}</span></p>
+		</div>
+
+		<div class="people col-sm-6 col-xs-12">
+			<h2>Your Favorite Movies</h2>
+			@for($i = 0; $i < count($query, COUNT_RECURSIVE) ; $i ++)
+
+			<p>{{$query[$i]->movieid}}</p>
+			
+	
+			@endfor
+
+
+		</div>
 	</div>
 </body>
 </html>

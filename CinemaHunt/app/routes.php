@@ -10,7 +10,7 @@
 | and give it the Closure to execute when that URI is requested.
 |
 */
-// // http://www.omdbapi.com/?s=300&r=json
+// http://www.omdbapi.com/?s=300&r=json
 //http://www.omdbapi.com/?i=tt0416449&r=json
 //HomeController@showresults
 
@@ -43,6 +43,8 @@ Route::post('results', 'HomeController@results');
 
 //calls detail page with corresponding imdb id in the GET
 Route::get('details/{imdbID}', 'HomeController@details');
+
+Route::get('logout', 'HomeController@logout');
 
 
 
