@@ -13,6 +13,11 @@
 <body>
 	<div class="col-sm-8 col-sm-offset-2 col-xs-12 col-xs-offset-0">
 		<a href="/"><img src="images/logo.jpg" class="logo-details"/></a>
+		@if(Session::get('user'))
+		<h3 class="col-sm-8"><a href="dashboard">Dashboard </a>| <a href="signup">Sign Up</a></h3>
+		@else
+		<h3 class="col-sm-8"><a href="login">Login</a> | <a href="signup">Sign Up</a></h3>
+		@endif
 	</div>
 	<!-- <h2 class="col-sm-8 col-sm-offset-2 col-xs-12 col-xs-offset-0"></h2> -->
 	<div class="results col-sm-8 col-sm-offset-2 col-xs-8 col-xs-offset-0">

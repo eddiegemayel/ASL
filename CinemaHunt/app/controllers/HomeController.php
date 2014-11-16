@@ -121,6 +121,8 @@ class HomeController extends BaseController {
             	->where('users.id', '=', $data['user']->id)
             	->get();
     		
+    		Session::put('query', $query);
+
             //store query into data object to be passed
     		$data['query'] = $query;
     		
@@ -157,7 +159,7 @@ class HomeController extends BaseController {
     	if($count === 0){
 
     		//run insert command
-    		$id = DB::table('users')->insertGetId(
+    		DB::table('users')->insertGetId(
     			array('username' => $username, 'password' => $password)
 			);
 
@@ -190,6 +192,15 @@ class HomeController extends BaseController {
 
 		//point them back to index
 		return Redirect::to('/');
+	}
+
+	public function dashboard(){
+		$data = array();
+
+		$data['query'] = Session::get('query');
+		$data['user'] = Session::get('user');
+
+		return View::make('dashboard', $data);
 	}
 
 

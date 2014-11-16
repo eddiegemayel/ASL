@@ -46,6 +46,8 @@ Route::get('details/{imdbID}', 'HomeController@details');
 
 Route::get('logout', 'HomeController@logout');
 
+Route::get('dashboard', 'HomeController@dashboard');
+
 
 
 
