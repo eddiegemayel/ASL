@@ -18,7 +18,7 @@
 	</div>
 	<div class="form row">
 	<form class="searchForm col-xs-12" method="POST" action="results">
-		<input class="search col-sm-7" type="text" name="title" autofocus required placeholder="Title of the movie you want to hunt . . ."/>
+		<input class="search col-sm-7" type="text" name="title" pattern=".{2,}" title="2 characters minimum" autofocus required placeholder="Title of the movie you want to hunt . . ."/>
 		<input class="btn col-sm-4" type="submit" value="LET'S FIND 'EM!"/>
 	</form>
 	</div>

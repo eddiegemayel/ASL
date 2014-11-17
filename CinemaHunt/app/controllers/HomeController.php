@@ -119,18 +119,47 @@ class HomeController extends BaseController {
     			//join favorites table
             	->join('favorites', 'users.id', '=', 'favorites.userid')
             	//select username and movie id
-            	->select('users.username', 'favorites.movietitle', 'favorites.moviegenre')
+            	->select('users.username', 'favorites.movietitle', 'favorites.moviegenre', 'favorites.movieid', 'favorites.movieyear')
             	//where user id current user id logged in
             	->where('users.id', '=', $data['user']->id)
             	->get();
     		
             // Session::put('query', $query);
             //store query into data object to be passed
-    		$data['query'] = $query;
-    			
-    			// var_dump($query);
-    		// point them to dashboard
-    		return View::make('dashboard', $data);
+    		
+			//get session info
+			$data['query'] = $query;
+
+			//count users' favorites
+			$count = count($data['query'], COUNT_RECURSIVE);
+
+			$data['count'] = $count;
+
+			//if they have favorite
+			if($count != 0){
+				//replace empty spaces in that string with %20 so the API URL doesn't get mad
+				$title= str_replace(" ", "%20", $data['query'][0]->movietitle);
+
+				//connect to find similar movies
+				//API url concatenated with the user entered search term 
+				$url = "http://www.omdbapi.com/?s=".$title."&r=json";
+
+				//make request to the url 
+				$response = file_get_contents($url);
+
+				//decode the incoming json
+				$results = json_decode($response);
+
+				$data['rec'] = $results->Search[1];
+
+				// var_dump($data['rec']);
+				return View::make('dashboard', $data);
+
+			}else{
+
+				//pass everything to the rendered page
+				return View::make('dashboard', $data);
+			}
     	}else{
     		$data['user'] = $username;
 
@@ -209,16 +238,49 @@ class HomeController extends BaseController {
     			//join favorites table
             	->join('favorites', 'users.id', '=', 'favorites.userid')
             	//select username and movie id
-            	->select('users.username', 'favorites.movietitle', 'favorites.moviegenre')
+            	->select('users.username', 'favorites.movietitle', 'favorites.moviegenre', 'favorites.movieid', 'favorites.movieyear')
             	//where user id current user id logged in
             	->where('users.id', '=', $data['user']->id)
             	->get();
 
 		//get session info
 		$data['query'] = $query;
-	
-		//pass everything to the rendered page
-		return View::make('dashboard', $data);
+
+		//count how many favorites they have
+		$count = count($data['query'], COUNT_RECURSIVE);
+
+		$data['count'] = $count;
+
+		//if they have favorites
+		if($count != 0){
+
+			//replace empty spaces in that string with %20 so the API URL doesn't get mad
+			$title= str_replace(" ", "%20", $data['query'][0]->movietitle);
+
+			//connect to find similar movies
+			//API url concatenated with the user entered search term 
+			$url = "http://www.omdbapi.com/?s=".$title."&r=json";
+
+			//make request to the url 
+			$response = file_get_contents($url);
+
+			//decode the incoming json
+			$results = json_decode($response);
+
+			//store results
+			$data['rec'] = $results->Search[1];
+
+			// var_dump($data['rec']);
+			return View::make('dashboard', $data);
+
+
+		}else{
+
+			//if no favorites just render dashboard
+			//pass everything to the rendered page
+			return View::make('dashboard', $data);
+		}
+
 	}
 
 
@@ -245,7 +307,8 @@ class HomeController extends BaseController {
     		array('userid' => $data['user']->id, 
     			'movieid' => $data['info']->imdbID,
     			'movietitle' => $data['info']->Title,
-    			'moviegenre' => $data['info']->Genre
+    			'moviegenre' => $data['info']->Genre,
+    			'movieyear' => $data['info']->Year
 
     			)
 		);

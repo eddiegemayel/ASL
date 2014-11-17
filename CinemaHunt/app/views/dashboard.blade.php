@@ -15,22 +15,37 @@
 		<a href="logout">Logout</a>
 	</div>
 	<div class="dashboard col-sm-8 col-sm-offset-2 col-xs-12 col-xs-offset-0">
-		<div class="movieDetails col-sm-6 col-xs-12">
-			<h2>Dashboard</h2>
+		<h1>Dashboard</h1>
+		<div class="col-sm-6 col-xs-12">
 			<h3>Welcome, {{$user->username}}</h3>
 			<p>Your password is : {{$user->password}}</p>
 			<p>For Developer Purposes, your unique userid is : <span class="highlight">{{$user->id}}</span></p>
 		</div>
 
-		<div class="people col-sm-6 col-xs-12">
-			<h2>Your Favorite Movies</h2>
+		<div class="col-sm-6 col-xs-12">
+			<h3>Your Favorite Movies</h3>
 			@for($i = 0; $i < count($query, COUNT_RECURSIVE) ; $i ++)
 
-			<p><span class="bold">{{$query[$i]->movietitle}}</span> | <span class="highlight">{{$query[$i]->moviegenre}}</span></p>
+			<p><a href="/details/{{$query[$i]->movieid}} ">{{$query[$i]->movietitle}}</a> ({{$query[$i]->movieyear}}) | 
+				<span class="highlight">{{$query[$i]->moviegenre}} </span> - 
+				<!-- <form method="POST" action=""> -->
+					<input type="submit" value="X"/>
+				<!-- </form> -->
+
+			</p>
 			
 			@endfor
 
 		</div>
+		
+	</div>
+	<div class="col-sm-6 col-sm-offset-2">
+		<h3>You May Also Like: </h3>
+		@if($count > 0)
+		<a href="/details/{{$rec->imdbID}}">{{$rec->Title}}</a>
+		@else
+		<p>You have no favorites!</p>
+		@endif
 	</div>
 </body>
 </html>
