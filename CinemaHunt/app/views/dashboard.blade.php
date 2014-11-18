@@ -28,13 +28,14 @@
 
 				@for($i = 0; $i < count($query, COUNT_RECURSIVE) ; $i ++)
 
-				<p><a href="/details/{{$query[$i]->movieid}} ">{{$query[$i]->movietitle}}</a> ({{$query[$i]->movieyear}}) | 
-					<span class="highlight">{{$query[$i]->moviegenre}} </span> - 
-					<!-- <form method="POST" action=""> -->
-						<input type="submit" value="X"/>
-					<!-- </form> -->
+				<p>
+					<a href="remove/{{$query[$i]->id}}"><span class="delete" >X</span></a>
+					<a href="/details/{{$query[$i]->movieid}} ">{{$query[$i]->movietitle}}</a> <span class="bold">({{$query[$i]->movieyear}})</span> | 
+					<span class="highlight">{{$query[$i]->moviegenre}} </span>
+					
 				</p>
 				@endfor
+				<p><span class="bold">+</span> Go on the <a href="/">Hunt</a> for more movies!</p>
 			@else
 			<h1><a href="/">Start Hunting Movies!</a></h1>
 			@endif
@@ -42,9 +43,10 @@
 		
 	</div>
 	<div class="col-sm-6 col-sm-offset-2">
-		<h3>You May Also Like: </h3>
+		<h3>You May Also Like </h3>
 		@if($count > 0)
-		<a href="/details/{{$rec->imdbID}}">{{$rec->Title}}</a>
+		<p><span class="highlight">1.) </span><a href="/details/{{$rec1->imdbID}}">{{$rec1->Title}}</a></p>
+		<p><span class="highlight">2.) </span><a href="/details/{{$rec2->imdbID}}">{{$rec2->Title}}</a></p>
 		@else
 		<p>You have no favorites!</p>
 		@endif

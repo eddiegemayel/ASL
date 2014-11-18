@@ -23,6 +23,7 @@
 	<div class="results col-sm-8 col-sm-offset-2 col-xs-8 col-xs-offset-0">
 		<h2>Sorry, there was an error.</h2>
 		<h3>Not sure what happened.</h3>
+		<h3>Try Reloading the page.</h3>
 	</div>
 </body>
 </html>

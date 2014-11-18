@@ -25,6 +25,10 @@ h1, h2, h3{
 	color:#ff6600;
 }
 
+input{
+	margin-top: 3%;
+}
+
 .searchForm{
 	overflow: hidden;
 }
@@ -51,7 +55,6 @@ h1, h2, h3{
 	padding-top: 1%;
 	padding-bottom: 1%;
 	text-align: left;
-
 }
 
 .details{
@@ -103,6 +106,10 @@ h1, h2, h3{
 
 .bold{
 	color:#5dc6cf;
+}
+
+.delete{
+	color:#FF281D;
 }
 
 .btn {

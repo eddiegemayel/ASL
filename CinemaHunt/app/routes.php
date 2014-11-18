@@ -53,6 +53,7 @@ Route::get('logout', 'HomeController@logout');
 //dashboard route 
 Route::get('dashboard', 'HomeController@dashboard');
 
+Route::get('remove/{id}', 'HomeController@remove');
 
 
 

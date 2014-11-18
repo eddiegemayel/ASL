@@ -13,18 +13,19 @@
 <body>
 	<div class="col-sm-8 col-sm-offset-2 col-xs-12 col-xs-offset-0">
 		<a href="/"><img src="../images/logo.jpg" class="logo-details"></a>
+		<a href="signup">Not a user? Sign Up here.</a>
 	</div>
 	<div class="col-xs-8 col-xs-offset-2">
 		<h2>Log In</h2>
 		<form method="POST" action="login">
 		<div class="col-xs-12">
-			<input type="text" name="username" placeholder="username" autofocus required/>
+			<input class="col-sm-6 col-xs-12" type="text" name="username" placeholder="Username" autofocus required/>
 		</div>
 		<div class="col-xs-12">
-			<input type="password" name="password" placeholder="password" required/>
+			<input class="col-sm-6 col-xs-12" type="password" name="password" placeholder="Password" required/>
 		</div>
 		<div class="col-xs-12">
-			<input type="submit" value="Log In" class="btn" />
+			<input class="col-sm-6 col-xs-12 btn" type="submit" value="Log In" />
 		</div>
 		</form>
 	</div>

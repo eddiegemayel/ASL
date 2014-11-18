@@ -38,7 +38,7 @@
 		</div>
 
 		<div class="people col-sm-6 col-xs-12">
-			<h3>The People Have Spoken!</h3>
+			<h3><span class="bold">The People Have Spoken!</span></h3>
 			<p><span class="bold">Awards :</span> {{$info->Awards}}</p>
 			<p><span class="bold">IMDb Rating :</span> <span class="highlight">{{$info->imdbRating}}</span> ({{$info->imdbVotes}} votes)</p>
 			<p><span class="bold">Metascore : </span><span class="highlight">{{$info->Metascore}}</span></p>

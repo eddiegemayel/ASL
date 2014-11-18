@@ -2,24 +2,6 @@
 
 class HomeController extends BaseController {
 
-	/*
-	|--------------------------------------------------------------------------
-	| Default Home Controller
-	|--------------------------------------------------------------------------
-	|
-	| You may wish to use controllers instead of, or in addition to, Closure
-	| based routes. That's great! Here is an example controller method to
-	| get you started. To route to this controller, just add the route:
-	|
-	|	Route::get('/', 'HomeController@showWelcome');
-	|	// var dump for testing
-	|	//Type of movie var dumps
-	|	// var_dump($results->Search[0]->Type);
-	|	//counts number of objects in array
-	|	// var_dump(count($new_res, COUNT_RECURSIVE));
-	|
-	*/
- 	
  	//----------------------------------------------------------------------------------------------results function
 	public function results (){
 		//get the title the user entered in the input
@@ -88,6 +70,7 @@ class HomeController extends BaseController {
 		$data['info'] = $results;
 		$data['imdbID'] = $imdbID;
 
+		//detail results into session just in case?
 		Session::put('info', $results);
  		
  		//render details view
@@ -128,67 +111,95 @@ class HomeController extends BaseController {
     			//join favorites table
             	->join('favorites', 'users.id', '=', 'favorites.userid')
             	//select username and movie id
-            	->select('users.username', 'favorites.movietitle', 'favorites.moviegenre', 'favorites.movieid', 'favorites.movieyear')
+            	->select('users.username', 'favorites.movietitle', 'favorites.moviegenre', 'favorites.movieid', 'favorites.movieyear', 'favorites.id')
             	//where user id current user id logged in
             	->where('users.id', '=', $data['user']->id)
             	->get();
     		
-            // Session::put('query', $query);
-            //store query into data object to be passed
-    		
-			//get session info
+          
+			//store query into data object to be passed
 			$data['query'] = $query;
 
 			//count users' favorites
 			$count = count($data['query'], COUNT_RECURSIVE);
 
+			//count passed to data
 			$data['count'] = $count;
 
+		//if they have favorites
+		if($count != 0){
 			//select random title to base recommendations off of
-			$title_int = rand(1,$count);
+			$title_int1 = rand(1,$count);
 			//subtract one so there is no errors
-			$title_int = $title_int - 1 ;
+			$title_int1 = $title_int1 - 1 ;
+
+			$title_int2 = rand(1, $count);
+			$title_int2 = $title_int2 - 1;
 
 			//replace empty spaces in that string with %20 so the API URL doesn't get mad
-			$title= str_replace(" ", "%20", $data['query'][$title_int]->movietitle);
+			$title1= str_replace(" ", "%20", $data['query'][$title_int1]->movietitle);
+			$title2= str_replace(" ", "%20", $data['query'][$title_int2]->movietitle);
 
 			//explode all words of the random title into an array
-			$arr = explode('%20',trim($title));
+			$arr1 = explode('%20',trim($title1));
+			$arr2 = explode('%20',trim($title2));
 			//array length count
-			$arrLength = count($arr, COUNT_RECURSIVE);
+			$arrLength1 = count($arr1, COUNT_RECURSIVE);
+			$arrLength2 = count($arr2, COUNT_RECURSIVE);
 			//random array number minus 1 so there will be no errors
-			$arrRand = rand(1, $arrLength);
-			$arrRand = $arrRand - 1;
+			$arrRand1 = rand(1, $arrLength1);
+			$arrRand1 = $arrRand1 - 1;
+
+			$arrRand2 = rand(1, $arrLength2);
+			$arrRand2 = $arrRand2 - 1;
 
 			//connect to find similar movies
 			//Array of words with random word in the array selected to search by 
-			$url = "http://www.omdbapi.com/?s=".$arr[$arrRand]."&r=json";
+			$url1 = "http://www.omdbapi.com/?s=".$arr1[$arrRand1]."&r=json";
+			$url2 = "http://www.omdbapi.com/?s=".$arr2[$arrRand2]."&r=json";
 
 			//make request to the url 
-			$response = file_get_contents($url);
+			$response1 = file_get_contents($url1);
+			$response2 = file_get_contents($url2);
 
 			//decode the incoming json
-			$results = json_decode($response);
+			$results1 = json_decode($response1);
+			$results2 = json_decode($response2);
 
 			//if there are results to return
-			if(isset($results->Search)){
+			if(isset($results1->Search) && isset($results2->Search)){
 				//count the search results
-				$search_count = count($results->Search, COUNT_RECURSIVE);
+				$search_count1 = count($results1->Search, COUNT_RECURSIVE);
+				$search_count2 = count($results2->Search, COUNT_RECURSIVE);
 
 				//random recommended number minus 1
-				$int =  rand ( 1 , $search_count );
-				$int = $int - 1 ;
+				$int1 =  rand ( 1 , $search_count1 );
+				$int1 = $int1 - 1 ;
+
+				$int2 =  rand ( 1 , $search_count2 );
+				$int2 = $int2 - 1 ;
 
 				//store random recommended
-				$data['rec'] = $results->Search[$int];
+				$data['rec1'] = $results1->Search[$int1];
+				$data['rec2'] = $results2->Search[$int2];
 
 				//return view
 				return View::make('dashboard', $data);
+				// return Redirect::to('dashboard', $data);
 
 			}else{
 				//show error page just in case something goes wrong
 				return View::make('404');
 			}
+
+		}else{
+
+			//if no favorites just render dashboard
+			//pass everything to the rendered page
+			return View::make('dashboard', $data);
+		}
+
+
     	}else{
     		$data['user'] = $username;
 
@@ -242,19 +253,6 @@ class HomeController extends BaseController {
 
 	}
 
-	//logout function
-	public function logout (){
-		//clear session of logged in user
-		Session::flush();
-
-
-		//should return NULL
-		// $username = Session::get('username');
-
-		//point them back to index
-		return Redirect::to('/');
-	}
-
 
 	//----------------------------------------------------------------------------------------------displaying dashboard
 	public function dashboard(){
@@ -263,14 +261,14 @@ class HomeController extends BaseController {
 		$data['user'] = Session::get('user');
 
 		//query database for user's favorites
-    		$query = DB::table('users')
-    			//join favorites table
-            	->join('favorites', 'users.id', '=', 'favorites.userid')
-            	//select username and movie id
-            	->select('users.username', 'favorites.movietitle', 'favorites.moviegenre', 'favorites.movieid', 'favorites.movieyear')
-            	//where user id current user id logged in
-            	->where('users.id', '=', $data['user']->id)
-            	->get();
+    	$query = DB::table('users')
+    		//join favorites table
+            ->join('favorites', 'users.id', '=', 'favorites.userid')
+            //select username and movie id
+            ->select('users.username', 'favorites.movietitle', 'favorites.moviegenre', 'favorites.movieid', 'favorites.movieyear', 'favorites.id')
+            //where user id current user id logged in
+            ->where('users.id', '=', $data['user']->id)
+            ->get();
 
 		//get session info
 		$data['query'] = $query;
@@ -284,42 +282,59 @@ class HomeController extends BaseController {
 		//if they have favorites
 		if($count != 0){
 			//select random title to base recommendations off of
-			$title_int = rand(1,$count);
+			$title_int1 = rand(1,$count);
 			//subtract one so there is no errors
-			$title_int = $title_int - 1 ;
+			$title_int1 = $title_int1 - 1 ;
+
+			$title_int2 = rand(1, $count);
+			$title_int2 = $title_int2 - 1;
 
 			//replace empty spaces in that string with %20 so the API URL doesn't get mad
-			$title= str_replace(" ", "%20", $data['query'][$title_int]->movietitle);
+			$title1= str_replace(" ", "%20", $data['query'][$title_int1]->movietitle);
+			$title2= str_replace(" ", "%20", $data['query'][$title_int2]->movietitle);
 
 			//explode all words of the random title into an array
-			$arr = explode('%20',trim($title));
+			$arr1 = explode('%20',trim($title1));
+			$arr2 = explode('%20',trim($title2));
 			//array length count
-			$arrLength = count($arr, COUNT_RECURSIVE);
+			$arrLength1 = count($arr1, COUNT_RECURSIVE);
+			$arrLength2 = count($arr2, COUNT_RECURSIVE);
 			//random array number minus 1 so there will be no errors
-			$arrRand = rand(1, $arrLength);
-			$arrRand = $arrRand - 1;
+			$arrRand1 = rand(1, $arrLength1);
+			$arrRand1 = $arrRand1 - 1;
+
+			$arrRand2 = rand(1, $arrLength2);
+			$arrRand2 = $arrRand2 - 1;
 
 			//connect to find similar movies
 			//Array of words with random word in the array selected to search by 
-			$url = "http://www.omdbapi.com/?s=".$arr[$arrRand]."&r=json";
+			$url1 = "http://www.omdbapi.com/?s=".$arr1[$arrRand1]."&r=json";
+			$url2 = "http://www.omdbapi.com/?s=".$arr2[$arrRand2]."&r=json";
 
 			//make request to the url 
-			$response = file_get_contents($url);
+			$response1 = file_get_contents($url1);
+			$response2 = file_get_contents($url2);
 
 			//decode the incoming json
-			$results = json_decode($response);
+			$results1 = json_decode($response1);
+			$results2 = json_decode($response2);
 
 			//if there are results to return
-			if(isset($results->Search)){
+			if(isset($results1->Search) && isset($results2->Search)){
 				//count the search results
-				$search_count = count($results->Search, COUNT_RECURSIVE);
+				$search_count1 = count($results1->Search, COUNT_RECURSIVE);
+				$search_count2 = count($results2->Search, COUNT_RECURSIVE);
 
 				//random recommended number minus 1
-				$int =  rand ( 1 , $search_count );
-				$int = $int - 1 ;
+				$int1 =  rand ( 1 , $search_count1 );
+				$int1 = $int1 - 1 ;
+
+				$int2 =  rand ( 1 , $search_count2 );
+				$int2 = $int2 - 1 ;
 
 				//store random recommended
-				$data['rec'] = $results->Search[$int];
+				$data['rec1'] = $results1->Search[$int1];
+				$data['rec2'] = $results2->Search[$int2];
 
 				//return view
 				return View::make('dashboard', $data);
@@ -339,7 +354,7 @@ class HomeController extends BaseController {
 	}
 
 
-	//adding a fav movie
+	//----------------------------------------------------------------------------------------------adding a fav movie
 	public function addFavorite($imdbID){
 		//empty object for data
 		$data = array();
@@ -372,5 +387,25 @@ class HomeController extends BaseController {
 		return View::make('/fav', $data);
 	}
 
+	//----------------------------------------------------------------------------------------------remove fav
+	public function remove($id){
+		//remove movie where unique id equals unique id
+		DB::table('favorites')->where('id', $id)->delete();
+		// var_dump($id);
+		return Redirect::to('dashboard');
+	}
+
+	//----------------------------------------------------------------------------------------------logout function
+	public function logout (){
+		//clear session of logged in user
+		Session::flush();
+
+
+		//should return NULL
+		// $username = Session::get('username');
+
+		//point them back to index
+		return Redirect::to('/');
+	}
 
 }//end of controller file
