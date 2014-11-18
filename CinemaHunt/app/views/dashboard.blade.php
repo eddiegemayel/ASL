@@ -18,7 +18,7 @@
 		<h1>Dashboard</h1>
 		<div class="col-sm-6 col-xs-12">
 			<h3>Welcome, {{$user->username}}</h3>
-			<p>Your password is : {{$user->password}}</p>
+			<p>For Developer Purposes, your password is : <span class="highlight">{{$user->password}}</span></p>
 			<p>For Developer Purposes, your unique userid is : <span class="highlight">{{$user->id}}</span></p>
 		</div>
 
@@ -36,7 +36,7 @@
 				</p>
 				@endfor
 			@else
-			<p>Start <a href="/">Hunting</a> Movies!</p>
+			<h1><a href="/">Start Hunting Movies!</a></h1>
 			@endif
 		</div>
 		

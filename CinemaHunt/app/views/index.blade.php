@@ -23,8 +23,11 @@
 	</form>
 	</div>
 	<div class="actions row">
-		<p><a href="signup">Sign Up</a></p>
-		<p><a href="login">Log In</a></p>
+		@if(Session::get('user'))
+		<h3 class="col-sm-8"><a href="dashboard">Dashboard </a>| <a href="signup">Sign Up</a> | <a href="logout">Logout</a></h3>
+		@else
+		<h3 class="col-sm-8"><a href="login">Login</a> | <a href="signup">Sign Up</a> | <a href="logout">Logout</a></h3>
+		@endif
 	</div>
 </body>
 </html>

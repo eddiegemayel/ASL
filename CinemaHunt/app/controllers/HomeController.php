@@ -144,30 +144,50 @@ class HomeController extends BaseController {
 
 			$data['count'] = $count;
 
-			//if they have favorite
-			if($count != 0){
-				//replace empty spaces in that string with %20 so the API URL doesn't get mad
-				$title= str_replace(" ", "%20", $data['query'][0]->movietitle);
+			//select random title to base recommendations off of
+			$title_int = rand(1,$count);
+			//subtract one so there is no errors
+			$title_int = $title_int - 1 ;
 
-				//connect to find similar movies
-				//API url concatenated with the user entered search term 
-				$url = "http://www.omdbapi.com/?s=".$title."&r=json";
+			//replace empty spaces in that string with %20 so the API URL doesn't get mad
+			$title= str_replace(" ", "%20", $data['query'][$title_int]->movietitle);
 
-				//make request to the url 
-				$response = file_get_contents($url);
+			//explode all words of the random title into an array
+			$arr = explode('%20',trim($title));
+			//array length count
+			$arrLength = count($arr, COUNT_RECURSIVE);
+			//random array number minus 1 so there will be no errors
+			$arrRand = rand(1, $arrLength);
+			$arrRand = $arrRand - 1;
 
-				//decode the incoming json
-				$results = json_decode($response);
+			//connect to find similar movies
+			//Array of words with random word in the array selected to search by 
+			$url = "http://www.omdbapi.com/?s=".$arr[$arrRand]."&r=json";
 
-				$data['rec'] = $results->Search[1];
+			//make request to the url 
+			$response = file_get_contents($url);
 
-				// var_dump($data['rec']);
+			//decode the incoming json
+			$results = json_decode($response);
+
+			//if there are results to return
+			if(isset($results->Search)){
+				//count the search results
+				$search_count = count($results->Search, COUNT_RECURSIVE);
+
+				//random recommended number minus 1
+				$int =  rand ( 1 , $search_count );
+				$int = $int - 1 ;
+
+				//store random recommended
+				$data['rec'] = $results->Search[$int];
+
+				//return view
 				return View::make('dashboard', $data);
 
 			}else{
-
-				//pass everything to the rendered page
-				return View::make('dashboard', $data);
+				//show error page just in case something goes wrong
+				return View::make('404');
 			}
     	}else{
     		$data['user'] = $username;
@@ -258,17 +278,30 @@ class HomeController extends BaseController {
 		//count how many favorites they have
 		$count = count($data['query'], COUNT_RECURSIVE);
 
+		//store count in the data to refer to it in the view later
 		$data['count'] = $count;
 
 		//if they have favorites
 		if($count != 0){
+			//select random title to base recommendations off of
+			$title_int = rand(1,$count);
+			//subtract one so there is no errors
+			$title_int = $title_int - 1 ;
 
 			//replace empty spaces in that string with %20 so the API URL doesn't get mad
-			$title= str_replace(" ", "%20", $data['query'][0]->movietitle);
+			$title= str_replace(" ", "%20", $data['query'][$title_int]->movietitle);
+
+			//explode all words of the random title into an array
+			$arr = explode('%20',trim($title));
+			//array length count
+			$arrLength = count($arr, COUNT_RECURSIVE);
+			//random array number minus 1 so there will be no errors
+			$arrRand = rand(1, $arrLength);
+			$arrRand = $arrRand - 1;
 
 			//connect to find similar movies
-			//API url concatenated with the user entered search term 
-			$url = "http://www.omdbapi.com/?s=".$title."&r=json";
+			//Array of words with random word in the array selected to search by 
+			$url = "http://www.omdbapi.com/?s=".$arr[$arrRand]."&r=json";
 
 			//make request to the url 
 			$response = file_get_contents($url);
@@ -276,12 +309,25 @@ class HomeController extends BaseController {
 			//decode the incoming json
 			$results = json_decode($response);
 
-			//store results
-			$data['rec'] = $results->Search[1];
+			//if there are results to return
+			if(isset($results->Search)){
+				//count the search results
+				$search_count = count($results->Search, COUNT_RECURSIVE);
 
-			// var_dump($data['rec']);
-			return View::make('dashboard', $data);
+				//random recommended number minus 1
+				$int =  rand ( 1 , $search_count );
+				$int = $int - 1 ;
 
+				//store random recommended
+				$data['rec'] = $results->Search[$int];
+
+				//return view
+				return View::make('dashboard', $data);
+
+			}else{
+				//show error page just in case something goes wrong
+				return View::make('404');
+			}
 
 		}else{
 
