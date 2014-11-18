@@ -24,18 +24,20 @@
 
 		<div class="col-sm-6 col-xs-12">
 			<h3>Your Favorite Movies</h3>
-			@for($i = 0; $i < count($query, COUNT_RECURSIVE) ; $i ++)
+			@if($count>0)
 
-			<p><a href="/details/{{$query[$i]->movieid}} ">{{$query[$i]->movietitle}}</a> ({{$query[$i]->movieyear}}) | 
-				<span class="highlight">{{$query[$i]->moviegenre}} </span> - 
-				<!-- <form method="POST" action=""> -->
-					<input type="submit" value="X"/>
-				<!-- </form> -->
+				@for($i = 0; $i < count($query, COUNT_RECURSIVE) ; $i ++)
 
-			</p>
-			
-			@endfor
-
+				<p><a href="/details/{{$query[$i]->movieid}} ">{{$query[$i]->movietitle}}</a> ({{$query[$i]->movieyear}}) | 
+					<span class="highlight">{{$query[$i]->moviegenre}} </span> - 
+					<!-- <form method="POST" action=""> -->
+						<input type="submit" value="X"/>
+					<!-- </form> -->
+				</p>
+				@endfor
+			@else
+			<p>Start <a href="/">Hunting</a> Movies!</p>
+			@endif
 		</div>
 		
 	</div>

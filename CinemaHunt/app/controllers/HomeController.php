@@ -20,7 +20,7 @@ class HomeController extends BaseController {
 	|
 	*/
  	
- 	//this function gets the results from our Open Movie Database API
+ 	//----------------------------------------------------------------------------------------------results function
 	public function results (){
 		//get the title the user entered in the input
 		$title = Input::get('title');
@@ -40,25 +40,34 @@ class HomeController extends BaseController {
 		//decode the incoming json
 		$results = json_decode($response);
 
-		//to count how many objects are returned with search query, store this variable to acll later
-		$new_res = $results->Search;
+		//if error exists
+		if(isset($results->Response)){
+			//display error to users
+			$data['error'] = $results;
+			//show them error page
+			return View::make('noresults', $data);
+		}else{
+			//to count how many objects are returned with search query, store this variable to acll later
+			$new_res = $results->Search;
 
-		//results to loop thru stored under object name search
-		$data['search'] = $results;
+			//results to loop thru stored under object name search
+			$data['search'] = $results;
 
-		//used to count how many objects are in the results array returned by the API
-		$data['new'] = $new_res;
+			//used to count how many objects are in the results array returned by the API
+			$data['new'] = $new_res;
 
-		// //To show what the user entered on the search page
-		// //grabbing value passed thru search
-		$data['query'] = $title;
+			// //To show what the user entered on the search page
+			// //grabbing value passed thru search
+			$data['query'] = $title;
 
-		//return the rendered result view and pass our data to the view
-		return View::make('results', $data);
+			//return the rendered result view and pass our data to the view
+			return View::make('results', $data);
+		}
+
 	}
 
 
-	//details controller
+	//----------------------------------------------------------------------------------------------details controller
 	//passing thru imdbID collected from movie clicked on
 	public function details ($imdbID){
 		//make new data array
@@ -87,7 +96,7 @@ class HomeController extends BaseController {
 	}
 
 	//login controller
-	//login function
+	//----------------------------------------------------------------------------------------------login function
 	public function login () {
 
 		//new empty data array
@@ -169,7 +178,7 @@ class HomeController extends BaseController {
 
 	}
 
-	//sign up function
+	//----------------------------------------------------------------------------------------------sign up function
 	public function register () {
 		//empty data array for passing to view
 		$data = array();
@@ -227,7 +236,7 @@ class HomeController extends BaseController {
 	}
 
 
-	//displaying dashboard
+	//----------------------------------------------------------------------------------------------displaying dashboard
 	public function dashboard(){
 		//new data array
 		$data = array();
