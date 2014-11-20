@@ -15,8 +15,8 @@
 	</div>
 	
 	<div class="dashboard col-sm-8 col-sm-offset-2 col-xs-12 col-xs-offset-0">
-		<h2>Added to Favorites!</h2>
-		<h2>Check your <a href="/dashboard">Dashboard!</a></h2>
+		<h2>Success! Added to Favorites!</h2>
+		<h2><a href="/">Hunt some more!</a> Or, check your <a href="/dashboard">Dashboard!</a></h2>
 	</div>
 </body>
 </html>

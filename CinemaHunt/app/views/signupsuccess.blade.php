@@ -15,7 +15,7 @@
 	</div>
 	<div class="dashboard col-xs-8 col-xs-offset-2">
 		<h2>Success!</h2>
-		<h2>Welcome, <span class="highlight">  {{$user}}. You've been added to the database.</span></h2>
+		<h2>Welcome to the safari, <span class="highlight">  {{$user}}.</span></h2>
 		<h3>Please now <a href="login">Log In</a> with your username and password.</h3>
 	</div>
 </body>

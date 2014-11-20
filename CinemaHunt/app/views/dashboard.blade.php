@@ -18,8 +18,8 @@
 		<h1>Dashboard</h1>
 		<div class="col-sm-6 col-xs-12">
 			<h3>Welcome, {{$user->username}}</h3>
-			<p>For Developer Purposes, your password is : <span class="highlight">{{$user->password}}</span></p>
-			<p>For Developer Purposes, your unique userid is : <span class="highlight">{{$user->id}}</span></p>
+			<p>Your password is : <span class="highlight">{{$user->password}}</span></p>
+			<p>Your unique User Id is : <span class="highlight">{{$user->id}}</span></p>
 		</div>
 
 		<div class="col-sm-6 col-xs-12">
@@ -29,9 +29,9 @@
 				@for($i = 0; $i < count($query, COUNT_RECURSIVE) ; $i ++)
 
 				<p>
-					<a href="remove/{{$query[$i]->id}}"><span class="delete" >X</span></a>
-					<a href="/details/{{$query[$i]->movieid}} ">{{$query[$i]->movietitle}}</a> <span class="bold">({{$query[$i]->movieyear}})</span> | 
-					<span class="highlight">{{$query[$i]->moviegenre}} </span>
+					<a href="remove/{{$query[$i]->id}}"><span class="delete">X</span></a>
+					<a href="/details/{{$query[$i]->movieid}} ">{{$query[$i]->movietitle}}</a> <span class="highlight">({{$query[$i]->movieyear}})
+					</span> 
 					
 				</p>
 				@endfor
@@ -45,8 +45,8 @@
 	<div class="col-sm-6 col-sm-offset-2">
 		<h3>You May Also Like </h3>
 		@if($count > 0)
-		<p><span class="highlight">1.) </span><a href="/details/{{$rec1->imdbID}}">{{$rec1->Title}}</a></p>
-		<p><span class="highlight">2.) </span><a href="/details/{{$rec2->imdbID}}">{{$rec2->Title}}</a></p>
+		<p><a href="/details/{{$rec1->imdbID}}">{{$rec1->Title}}</a> <span class="highlight">({{$rec1->Year}})</span></p>
+		<p><a href="/details/{{$rec2->imdbID}}">{{$rec2->Title}}</a> <span class="highlight">({{$rec2->Year}})</span></p>
 		@else
 		<p>You have no favorites!</p>
 		@endif

@@ -23,6 +23,7 @@
 	</form>
 	</div>
 	<div class="actions row">
+		<!-- If user is logged in or not -->
 		@if(Session::get('user'))
 		<h3 class="col-sm-8"><a href="dashboard">Dashboard </a>| <a href="signup">Sign Up</a> | <a href="logout">Logout</a></h3>
 		@else

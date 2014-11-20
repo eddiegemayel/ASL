@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8"/>
-	<title>404 | Cinema Hunt</title>
+	<title>Error | Cinema Hunt</title>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
 
 	<!-- Latest compiled and minified JavaScript -->
@@ -22,8 +22,7 @@
 	<!-- <h2 class="col-sm-8 col-sm-offset-2 col-xs-12 col-xs-offset-0"></h2> -->
 	<div class="results col-sm-8 col-sm-offset-2 col-xs-8 col-xs-offset-0">
 		<h2>Sorry, there was an error.</h2>
-		<h3>Not sure what happened.</h3>
-		<h3>Try Reloading the page.</h3>
+		<h3>Try Reloading the page, or going back to the <a href="/">home page.</a></h3>
 	</div>
 </body>
 </html>
